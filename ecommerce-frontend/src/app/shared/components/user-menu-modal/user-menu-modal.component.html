@@ -1,0 +1,108 @@
+<div class="user-modal-container">
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="user-info" *ngIf="isLoggedIn; else guestHeader">
+        <div class="user-avatar-large">
+          <img *ngIf="userAvatar; else defaultAvatar" [src]="userAvatar" [alt]="userName" class="avatar-image">
+          <ng-template #defaultAvatar>
+            <mat-icon class="default-avatar-icon">account_circle</mat-icon>
+          </ng-template>
+        </div>
+        <div class="user-details">
+          <h3 class="user-name">{{ userName }}</h3>
+          <p class="user-email">{{ userEmail }}</p>
+        </div>
+      </div>
+      
+      <ng-template #guestHeader>
+        <div class="guest-info">
+          <mat-icon class="guest-icon">person_outline</mat-icon>
+          <div class="guest-details">
+            <h3 class="guest-title">Welcome!</h3>
+            <p class="guest-subtitle">Sign in to access your account</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    
+    <button mat-icon-button class="close-btn" (click)="onClose()" matTooltip="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="modal-content">
+    <!-- Guest Menu -->
+    <div *ngIf="!isLoggedIn" class="guest-menu">
+      <button mat-flat-button class="menu-action primary-action" (click)="onSignIn()">
+        <mat-icon>login</mat-icon>
+        <span>Sign In</span>
+      </button>
+      
+      <button mat-stroked-button class="menu-action secondary-action" (click)="onSignUp()">
+        <mat-icon>person_add</mat-icon>
+        <span>Create Account</span>
+      </button>
+      
+      <mat-divider class="divider"></mat-divider>
+      
+      <div class="guest-features">
+        <div class="feature-item">
+          <mat-icon>local_shipping</mat-icon>
+          <span>Track your orders</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>favorite</mat-icon>
+          <span>Save your favorites</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>notifications</mat-icon>
+          <span>Get exclusive deals</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logged In Menu -->
+    <div *ngIf="isLoggedIn" class="user-menu">
+      <div class="menu-section">
+        <button mat-button class="menu-item" (click)="onProfile()" matRipple>
+          <mat-icon>account_box</mat-icon>
+          <span>My Profile</span>
+          <mat-icon class="arrow">chevron_right</mat-icon>
+        </button>
+        
+        <button mat-button class="menu-item" (click)="onOrders()" matRipple>
+          <mat-icon>shopping_bag</mat-icon>
+          <span>My Orders</span>
+          <mat-icon class="arrow">chevron_right</mat-icon>
+        </button>
+        
+        <button mat-button class="menu-item" (click)="onWishlist()" matRipple>
+          <mat-icon>favorite</mat-icon>
+          <span>Wishlist</span>
+          <mat-icon class="arrow">chevron_right</mat-icon>
+        </button>
+      </div>
+      
+      <mat-divider class="divider"></mat-divider>
+      
+      <div class="menu-section">
+        <button mat-button class="menu-item" (click)="onSettings()" matRipple>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+          <mat-icon class="arrow">chevron_right</mat-icon>
+        </button>
+      </div>
+      
+      <mat-divider class="divider"></mat-divider>
+      
+      <div class="menu-section">
+        <button mat-button class="menu-item logout-item" (click)="onLogout()" matRipple>
+          <mat-icon>logout</mat-icon>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

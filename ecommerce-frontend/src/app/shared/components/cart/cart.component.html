@@ -1,0 +1,84 @@
+<div class="cart-sidebar">
+  <!-- Header -->
+  <div class="cart-header">
+    <h3>
+      <mat-icon>shopping_cart</mat-icon>
+      Mi Carrito
+      <span class="item-count" *ngIf="totalItems > 0">({{ totalItems }})</span>
+    </h3>
+    <button mat-icon-button class="close-btn" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Cart Items -->
+  <div class="cart-content">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <mat-icon class="empty-icon">shopping_cart</mat-icon>
+      <h4>Tu carrito está vacío</h4>
+      <p>Agrega algunos productos para comenzar a comprar</p>
+      <button mat-raised-button color="primary" (click)="onClose()">
+        Explorar Productos
+      </button>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="item-image">
+          <img [src]="item.image" [alt]="item.name">
+        </div>
+        
+        <div class="item-details">
+          <h4>{{ item.name }}</h4>
+          <div class="item-attributes">
+            <span class="attribute">{{ item.size }}</span>
+            <span class="attribute">{{ item.color }}</span>
+          </div>
+          <div class="item-price">${{ item.price | number:'1.2-2' }}</div>
+        </div>
+
+        <div class="item-actions">
+          <div class="quantity-controls">
+            <button mat-icon-button (click)="updateQuantity(item.id, item.quantity - 1)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="quantity">{{ item.quantity }}</span>
+            <button mat-icon-button (click)="updateQuantity(item.id, item.quantity + 1)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <button mat-icon-button class="remove-btn" (click)="removeItem(item.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="cart-footer" *ngIf="cartItems.length > 0">
+    <div class="total-section">
+      <div class="subtotal">
+        <span>Subtotal:</span>
+        <span class="amount">${{ totalPrice | number:'1.2-2' }}</span>
+      </div>
+      <div class="shipping">
+        <span>Envío:</span>
+        <span class="amount">Gratis</span>
+      </div>
+      <div class="total">
+        <span>Total:</span>
+        <span class="amount">${{ totalPrice | number:'1.2-2' }}</span>
+      </div>
+    </div>
+    
+    <div class="checkout-actions">
+      <button mat-button class="view-cart-btn" (click)="onClose()">
+        Ver Carrito Completo
+      </button>
+      <button mat-raised-button color="primary" class="checkout-btn" (click)="proceedToCheckout()">
+        Finalizar Compra
+      </button>
+    </div>
+  </div>
+</div>
