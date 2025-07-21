@@ -1,0 +1,68 @@
+<nav class="modern-navbar" role="navigation">
+  <div class="navbar-container">
+    <!-- Brand Logo -->
+    <div class="brand-section">
+      <div class="logo-container">
+        <mat-icon class="logo-icon">storefront</mat-icon>
+        <span class="brand-text">Da Vincci</span>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="nav-section" [class.nav-open]="isMenuOpen">
+      <div class="nav-links">
+        <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </a>
+        <a class="nav-link" routerLink="/shop" routerLinkActive="active">
+          <mat-icon>shopping_bag</mat-icon>
+          <span>Shop</span>
+        </a>
+        <a class="nav-link" routerLink="/categories" routerLinkActive="active">
+          <mat-icon>category</mat-icon>
+          <span>Categories</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="actions-section">
+      <!-- Search Button -->
+      <button mat-icon-button class="action-btn search-btn" (click)="openSearch()" matTooltip="Search products">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <!-- Cart Button -->
+      <button mat-icon-button class="action-btn cart-btn" (click)="openCart()" matTooltip="Shopping cart">
+        <mat-icon matBadge="3" matBadgeColor="accent" matBadgeSize="small">shopping_cart</mat-icon>
+      </button>
+
+      <!-- Favorites Button -->
+      <button mat-icon-button class="action-btn favorites-btn" (click)="openFavorites()" matTooltip="Wishlist">
+        <mat-icon>favorite_border</mat-icon>
+      </button>
+
+      <!-- Theme Toggle -->
+      <app-theme-toggle class="theme-toggle"></app-theme-toggle>
+
+      <!-- User Menu / Login -->
+      <button mat-icon-button class="user-avatar" (click)="openUserMenu()" [matTooltip]="authService.isLoggedIn ? 'User Menu' : 'Login'">
+        <mat-icon>{{ authService.isLoggedIn ? 'account_circle' : 'login' }}</mat-icon>
+      </button>
+
+      <!-- Mobile Menu Toggle -->
+      <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-overlay" [class.active]="isMenuOpen" (click)="closeMobileMenu()"></div>
+</nav>
+
+<!-- Modal Components -->
+<app-search-modal></app-search-modal>
+<app-cart-modal></app-cart-modal>
+<app-favorites-modal></app-favorites-modal>

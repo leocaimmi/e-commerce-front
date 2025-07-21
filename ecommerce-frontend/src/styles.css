@@ -1,0 +1,159 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0;
+}
+
+body { 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Add top padding to account for fixed navbar */
+  padding-top: 70px;
+}
+
+/* Global Theme Classes */
+.light-theme {
+  background-color: #fafafa;
+  color: #1a1a1a;
+}
+
+.dark-theme {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 39, 176, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 39, 176, 0.5);
+}
+
+/* Dark theme scrollbar */
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: rgba(187, 134, 252, 0.3);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: rgba(187, 134, 252, 0.5);
+}
+
+/* Global Material Design overrides */
+.mat-mdc-menu-panel {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.mat-mdc-menu-item {
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+}
+
+/* Custom Modal Styles */
+.custom-modal-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+  overflow: visible !important;
+  z-index: 1200 !important;
+}
+
+.user-menu-backdrop {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  z-index: 1199 !important;
+}
+
+.dark-theme .user-menu-backdrop {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Modal Animation */
+.custom-modal-panel .mat-mdc-dialog-container {
+  animation: modalSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Override Material Dialog z-index */
+.cdk-overlay-container {
+  z-index: 1200 !important;
+}
+
+.cdk-overlay-backdrop {
+  z-index: 1199 !important;
+}
+
+.cdk-overlay-pane {
+  z-index: 1200 !important;
+}
+
+/* Fix tooltips z-index */
+.mat-mdc-tooltip {
+  z-index: 1300 !important;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+  z-index: 1300 !important;
+}
+
+/* Tooltip styles */
+.mat-mdc-tooltip-panel {
+  background-color: rgba(33, 33, 33, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  z-index: 1300 !important;
+}
+
+.dark-theme .mat-mdc-tooltip-panel {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #1a1a1a !important;
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #9C27B0;
+  outline-offset: 2px;
+}
+
+.dark-theme *:focus-visible {
+  outline-color: #BB86FC;
+}

@@ -1,0 +1,37 @@
+<div class="logout-modal">
+  <!-- Header con gradiente -->
+  <div class="logout-header">
+    <div class="icon-container">
+      <mat-icon class="logout-icon">logout</mat-icon>
+    </div>
+    <h3>¿Cerrar sesión?</h3>
+    <p>¿Estás seguro que deseas cerrar tu sesión?</p>
+  </div>
+
+  <!-- Content -->
+  <div class="logout-content">
+    <div class="warning-message">
+      <mat-icon class="warning-icon">info</mat-icon>
+      <span>Tendrás que volver a iniciar sesión para acceder a tu cuenta</span>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="logout-actions">
+    <button 
+      mat-button 
+      class="cancel-btn" 
+      (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+      Cancelar
+    </button>
+    
+    <button 
+      mat-raised-button 
+      class="confirm-btn" 
+      (click)="onConfirm()">
+      <mat-icon>logout</mat-icon>
+      Sí, cerrar sesión
+    </button>
+  </div>
+</div>

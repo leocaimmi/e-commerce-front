@@ -1,0 +1,65 @@
+<div class="search-modal-container" [class.visible]="isVisible" (click)="onClose()">
+  <div class="search-modal-content" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-content">
+        <mat-icon class="search-icon">search</mat-icon>
+        <h3 class="modal-title">Search Products</h3>
+      </div>
+      <button mat-icon-button class="close-btn" (click)="onClose()" matTooltip="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Search Input -->
+    <div class="search-input-container">
+      <mat-form-field class="search-field" appearance="outline">
+        <mat-label>What are you looking for?</mat-label>
+        <input 
+          #searchInput
+          matInput 
+          [(ngModel)]="searchQuery" 
+          (keydown.enter)="onSearch()"
+          placeholder="Search for products, brands, categories..."
+          autocomplete="off">
+        <mat-icon matSuffix *ngIf="searchQuery" class="clear-icon" (click)="onClearSearch()">close</mat-icon>
+        <mat-icon matSuffix *ngIf="!searchQuery" class="search-suffix-icon">search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h4 class="section-title">Popular Searches</h4>
+      <div class="quick-tags">
+        <button class="quick-tag" (click)="searchQuery = 'smartphones'; onSearch()">
+          <mat-icon>phone_android</mat-icon>
+          <span>Smartphones</span>
+        </button>
+        <button class="quick-tag" (click)="searchQuery = 'laptops'; onSearch()">
+          <mat-icon>laptop</mat-icon>
+          <span>Laptops</span>
+        </button>
+        <button class="quick-tag" (click)="searchQuery = 'headphones'; onSearch()">
+          <mat-icon>headphones</mat-icon>
+          <span>Headphones</span>
+        </button>
+        <button class="quick-tag" (click)="searchQuery = 'fashion'; onSearch()">
+          <mat-icon>checkroom</mat-icon>
+          <span>Fashion</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Button -->
+    <div class="search-actions">
+      <button 
+        mat-flat-button 
+        class="search-btn" 
+        (click)="onSearch()"
+        [disabled]="!searchQuery.trim()">
+        <mat-icon>search</mat-icon>
+        <span>Search</span>
+      </button>
+    </div>
+  </div>
+</div>

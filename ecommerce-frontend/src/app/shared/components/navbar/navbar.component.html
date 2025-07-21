@@ -1,0 +1,108 @@
+<nav class="modern-navbar" role="navigation">
+  <div class="navbar-container">
+    <!-- Brand Logo -->
+    <div class="brand-section">
+      <div class="logo-container">
+        <mat-icon class="logo-icon">storefront</mat-icon>
+        <span class="brand-text">Da Vinci</span>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="nav-section" [class.nav-open]="isMenuOpen">
+      <div class="nav-links">
+        <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="onNavLinkClick()">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </a>
+        <a class="nav-link" routerLink="/shop" routerLinkActive="active" (click)="onNavLinkClick()">
+          <mat-icon>shopping_bag</mat-icon>
+          <span>Shop</span>
+        </a>
+        <a class="nav-link" routerLink="/categories" routerLinkActive="active" (click)="onNavLinkClick()">
+          <mat-icon>category</mat-icon>
+          <span>Categories</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="actions-section">
+      <!-- Search Button -->
+      <button mat-icon-button class="action-btn search-btn" (click)="openSearch()">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <!-- Cart Button -->
+      <button mat-icon-button class="action-btn cart-btn" (click)="openCart()">
+        <mat-icon matBadge="3" matBadgeColor="accent" matBadgeSize="small">shopping_cart</mat-icon>
+      </button>
+
+      <!-- Favorites Button -->
+      <button mat-icon-button class="action-btn favorites-btn" (click)="openFavorites()">
+        <mat-icon>favorite_border</mat-icon>
+      </button>
+
+      <!-- Theme Toggle -->
+      <app-theme-toggle class="theme-toggle"></app-theme-toggle>
+
+      <!-- User Button -->
+      <button mat-icon-button class="user-avatar" (click)="openUserMenu()">
+        <mat-icon>{{ authService.isLoggedIn ? 'account_circle' : 'login' }}</mat-icon>
+      </button>
+
+      <!-- Mobile Menu Toggle -->
+      <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-overlay" [class.active]="isMenuOpen" (click)="closeMobileMenu()"></div>
+</nav>
+
+<!-- Search Modal -->
+<app-search-modal></app-search-modal>
+
+<!-- Login Component Overlay -->
+<div class="login-overlay" [class.active]="showLogin" (click)="closeLogin()">
+  <div class="login-wrapper" (click)="$event.stopPropagation()">
+    <app-login 
+      *ngIf="showLogin" 
+      (loginSuccess)="onLoginSuccess()" 
+      (closeLogin)="closeLogin()">
+    </app-login>
+  </div>
+</div>
+
+<!-- Cart Sidebar Overlay -->
+<div class="sidebar-overlay cart-overlay" [class.active]="showCart" (click)="closeCart()">
+  <div class="sidebar-wrapper cart-wrapper" (click)="$event.stopPropagation()">
+    <app-cart 
+      *ngIf="showCart" 
+      (closeCart)="closeCart()">
+    </app-cart>
+  </div>
+</div>
+
+<!-- Favorites Sidebar Overlay -->
+<div class="sidebar-overlay favorites-overlay" [class.active]="showFavorites" (click)="closeFavorites()">
+  <div class="sidebar-wrapper favorites-wrapper" (click)="$event.stopPropagation()">
+    <app-favorites 
+      *ngIf="showFavorites" 
+      (closeFavorites)="closeFavorites()">
+    </app-favorites>
+  </div>
+</div>
+
+<!-- Logout Confirmation Overlay -->
+<div class="login-overlay" [class.active]="showLogoutConfirmation" (click)="onLogoutCancel()">
+  <div class="login-wrapper" (click)="$event.stopPropagation()">
+    <app-logout-confirmation 
+      *ngIf="showLogoutConfirmation" 
+      (confirmLogout)="onLogoutConfirm()" 
+      (cancelLogout)="onLogoutCancel()">
+    </app-logout-confirmation>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="favorites-sidebar">
+  <!-- Header -->
+  <div class="favorites-header">
+    <h3>
+      <mat-icon>favorite</mat-icon>
+      Mis Favoritos
+      <span class="item-count" *ngIf="totalItems > 0">({{ totalItems }})</span>
+    </h3>
+    <button mat-icon-button class="close-btn" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Favorites Content -->
+  <div class="favorites-content">
+    <div *ngIf="favoriteItems.length === 0" class="empty-favorites">
+      <mat-icon class="empty-icon">favorite_border</mat-icon>
+      <h4>No tienes favoritos aún</h4>
+      <p>Guarda productos que te gusten para encontrarlos fácilmente</p>
+      <button mat-raised-button color="primary" (click)="onClose()">
+        Explorar Productos
+      </button>
+    </div>
+
+    <div *ngIf="favoriteItems.length > 0" class="favorites-list">
+      <div class="favorite-item" *ngFor="let item of favoriteItems">
+        <!-- Product Image -->
+        <div class="item-image" (click)="viewProduct(item)">
+          <img [src]="item.image" [alt]="item.name">
+          <div class="discount-badge" *ngIf="item.discount > 0">
+            -{{ item.discount }}%
+          </div>
+          <div class="stock-status" [class.out-of-stock]="!item.inStock">
+            {{ item.inStock ? 'En Stock' : 'Agotado' }}
+          </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="item-info">
+          <h4 class="item-name" (click)="viewProduct(item)">{{ item.name }}</h4>
+          
+          <!-- Rating -->
+          <div class="rating">
+            <mat-icon *ngFor="let star of generateStars(item.rating)" class="star-icon">
+              {{ star }}
+            </mat-icon>
+            <span class="rating-value">({{ item.rating }})</span>
+          </div>
+
+          <!-- Price -->
+          <div class="price-section">
+            <span class="current-price">${{ item.price | number:'1.2-2' }}</span>
+            <span class="original-price" *ngIf="item.originalPrice">
+              ${{ item.originalPrice | number:'1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="item-actions">
+          <button 
+            mat-icon-button 
+            class="remove-btn" 
+            (click)="removeFromFavorites(item.id)"
+            matTooltip="Quitar de favoritos">
+            <mat-icon>favorite</mat-icon>
+          </button>
+          
+          <button 
+            mat-raised-button 
+            color="primary" 
+            class="add-to-cart-btn"
+            [disabled]="!item.inStock"
+            (click)="addToCart(item)">
+            <mat-icon>shopping_cart</mat-icon>
+            {{ item.inStock ? 'Agregar' : 'Agotado' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="favorites-footer" *ngIf="favoriteItems.length > 0">
+    <div class="footer-stats">
+      <p>{{ totalItems }} producto{{ totalItems !== 1 ? 's' : '' }} guardado{{ totalItems !== 1 ? 's' : '' }}</p>
+    </div>
+    
+    <div class="footer-actions">
+      <button mat-button class="view-all-btn" (click)="onClose()">
+        Ver Todos los Favoritos
+      </button>
+      <button mat-raised-button color="primary" class="continue-shopping-btn" (click)="onClose()">
+        Seguir Comprando
+      </button>
+    </div>
+  </div>
+</div>
