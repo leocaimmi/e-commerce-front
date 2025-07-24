@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/pages/login/login.component';
+import { LoginSuccessComponent } from './features/auth/pages/login-success/login-success.component';
 import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
@@ -9,21 +10,7 @@ export const routes: Routes = [
         pathMatch: "full"
     },
     {
-        path: "home",
-        component: HomeComponent
-    },
-    {
-        path: "login",
-        component: LoginComponent
-    },
-    {
-        path: "shop",
-        redirectTo: "",
-        pathMatch: "full"
-    },
-    {
-        path: "categories",
-        redirectTo: "",
-        pathMatch: "full"
+        path: "login-success",
+        component: LoginSuccessComponent
     }
 ];
