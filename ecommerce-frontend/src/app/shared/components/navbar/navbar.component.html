@@ -46,9 +46,35 @@
       <!-- Theme Toggle -->
       <app-theme-toggle class="theme-toggle"></app-theme-toggle>
 
-      <!-- User Button -->
-      <button mat-icon-button class="user-avatar" (click)="openUserMenu()">
-        <mat-icon>{{ authService.isLoggedIn ? 'account_circle' : 'login' }}</mat-icon>
+      <!-- User Actions - when logged in -->
+      <div class="user-actions" *ngIf="authService.isAuthenticated()">
+        <!-- User Avatar/Profile Button -->
+        <button mat-icon-button class="user-avatar-btn" (click)="openUserMenu()" matTooltip="Ver perfil">
+          <div class="avatar-container">
+            <img *ngIf="currentUser?.avatar && !imageError; else defaultAvatar" 
+                 [src]="currentUser!.avatar" 
+                 [alt]="currentUser!.name"
+                 class="user-avatar-img"
+                 (error)="onImageError()">
+            <ng-template #defaultAvatar>
+              <mat-icon class="default-avatar">account_circle</mat-icon>
+            </ng-template>
+          </div>
+        </button>
+
+        <!-- Logout Button -->
+        <button mat-icon-button class="logout-btn" (click)="openLogoutMenu()" matTooltip="Cerrar sesión">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+
+      <!-- Login Button - when not logged in -->
+      <button *ngIf="!authService.isAuthenticated()" 
+              mat-icon-button 
+              class="login-btn" 
+              (click)="openUserMenu()"
+              matTooltip="Iniciar sesión">
+        <mat-icon>login</mat-icon>
       </button>
 
       <!-- Mobile Menu Toggle -->
@@ -71,8 +97,21 @@
     <app-login 
       *ngIf="showLogin" 
       (loginSuccess)="onLoginSuccess()" 
-      (closeLogin)="closeLogin()">
+      (closeLogin)="closeLogin()"
+      (switchToRegister)="switchToRegister()">
     </app-login>
+  </div>
+</div>
+
+<!-- Register Component Overlay -->
+<div class="login-overlay" [class.active]="showRegister" (click)="closeRegister()">
+  <div class="login-wrapper" (click)="$event.stopPropagation()">
+    <app-register 
+      *ngIf="showRegister" 
+      (registerSuccess)="onRegisterSuccess()" 
+      (closeRegister)="closeRegister()"
+      (switchToLogin)="switchToLogin()">
+    </app-register>
   </div>
 </div>
 
@@ -104,5 +143,15 @@
       (confirmLogout)="onLogoutConfirm()" 
       (cancelLogout)="onLogoutCancel()">
     </app-logout-confirmation>
+  </div>
+</div>
+
+<!-- User Profile Overlay -->
+<div class="login-overlay" [class.active]="showProfile" (click)="closeProfile()">
+  <div class="login-wrapper" (click)="$event.stopPropagation()">
+    <app-user-profile 
+      *ngIf="showProfile" 
+      (closeProfile)="closeProfile()">
+    </app-user-profile>
   </div>
 </div>

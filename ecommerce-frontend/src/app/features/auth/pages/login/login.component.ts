@@ -36,6 +36,7 @@ export class LoginComponent {
   // Eventos para uso como componente standalone
   @Output() loginSuccess = new EventEmitter<void>();
   @Output() closeLogin = new EventEmitter<void>();
+  @Output() switchToRegister = new EventEmitter<void>();
 
   loginForm: FormGroup;
   isLoading = false;
@@ -85,28 +86,11 @@ export class LoginComponent {
     this.errorMessage = '';
 
     try {
-      // Simulamos un login con Google
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const googleUser = {
-        id: 'google_' + Date.now(),
-        name: 'Usuario Google',
-        email: 'usuario@gmail.com',
-        avatar: 'https://lh3.googleusercontent.com/a/default-user=s96-c'
-      };
-      
-      this.authService.login(googleUser);
-      
-      // Cerrar modal si existe, o emitir evento si es componente standalone
-      if (this.dialogRef) {
-        this.dialogRef.close();
-      } else {
-        this.loginSuccess.emit();
-      }
+      // Redirigir directamente al endpoint de Google OAuth del backend
+      this.authService.loginWithGoogle();
       
     } catch (error: any) {
       this.errorMessage = error.message || 'Error al iniciar sesión con Google';
-    } finally {
       this.isLoading = false;
     }
   }
@@ -121,7 +105,7 @@ export class LoginComponent {
   }
 
   openSignup(): void {
-    console.log('Abrir registro');
+    this.switchToRegister.emit();
   }
 
   getEmailErrorMessage(): string {

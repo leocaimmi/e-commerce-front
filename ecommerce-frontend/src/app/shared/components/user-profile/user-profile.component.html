@@ -1,0 +1,136 @@
+<div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <img *ngIf="currentUser?.avatar && !imageError; else defaultAvatar" 
+               [src]="currentUser!.avatar" 
+               [alt]="currentUser?.name"
+               (error)="onImageError()">
+          <ng-template #defaultAvatar>
+            <div class="default-avatar-container">
+              <mat-icon class="default-avatar-icon">account_circle</mat-icon>
+            </div>
+          </ng-template>
+          <button class="avatar-edit-btn" 
+                  mat-mini-fab 
+                  color="primary"
+                  (click)="triggerFileInput()"
+                  [disabled]="isEditing && profileForm.get('profilePictureUrl')?.disabled">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <input #fileInput 
+                 type="file" 
+                 accept="image/*" 
+                 style="display: none"
+                 (change)="onImageSelected($event)">
+        </div>
+        <div class="profile-info">
+          <h2>{{currentUser?.name}}</h2>
+          <p class="profile-email">{{currentUser?.email}}</p>
+          <div class="profile-role">
+            <mat-icon>badge</mat-icon>
+            <span>{{userRole}}</span>
+          </div>
+        </div>
+        <button mat-icon-button 
+                class="close-btn"
+                (click)="onClose()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="profile-body">
+        <div class="profile-actions" *ngIf="!isEditing">
+          <button mat-raised-button 
+                  color="primary"
+                  (click)="startEditing()">
+            <mat-icon>edit</mat-icon>
+            Editar Perfil
+          </button>
+        </div>
+
+        <form [formGroup]="profileForm" 
+              (ngSubmit)="onSaveProfile()" 
+              *ngIf="isEditing"
+              class="profile-form">
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput 
+                   formControlName="name"
+                   placeholder="Tu nombre completo">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="profileForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="profileForm.get('name')?.hasError('minlength')">
+              El nombre debe tener al menos 2 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput 
+                   [matDatepicker]="picker" 
+                   formControlName="birthday"
+                   placeholder="Selecciona tu fecha de nacimiento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="profileForm.get('birthday')?.hasError('required')">
+              La fecha de nacimiento es requerida
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>URL de Foto de Perfil</mat-label>
+            <input matInput 
+                   formControlName="profilePictureUrl"
+                   placeholder="https://ejemplo.com/mi-foto.jpg">
+            <mat-icon matSuffix>link</mat-icon>
+            <mat-hint>Opcional: URL de tu foto de perfil</mat-hint>
+          </mat-form-field>
+
+          <div class="readonly-fields">
+            <div class="readonly-field">
+              <mat-icon>email</mat-icon>
+              <div class="field-content">
+                <label>Email</label>
+                <span>{{currentUser?.email}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" 
+                    mat-button 
+                    (click)="cancelEditing()">
+              Cancelar
+            </button>
+            <button type="submit" 
+                    mat-raised-button 
+                    color="primary"
+                    [disabled]="profileForm.invalid || isSaving">
+              <mat-icon *ngIf="isSaving">sync</mat-icon>
+              <mat-icon *ngIf="!isSaving">save</mat-icon>
+              {{isSaving ? 'Guardando...' : 'Guardar Cambios'}}
+            </button>
+          </div>
+        </form>
+
+        <div class="profile-stats" *ngIf="!isEditing">
+          <div class="stat-item">
+            <mat-icon>schedule</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">Miembro desde</span>
+              <span class="stat-value">{{memberSince}}</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <mat-icon>cake</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">Cumpleaños</span>
+              <span class="stat-value">{{userBirthday}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
