@@ -9,8 +9,8 @@ html, body {
 body { 
   font-family: Roboto, "Helvetica Neue", sans-serif; 
   transition: background-color 0.3s ease, color 0.3s ease;
-  /* Add top padding to account for fixed navbar */
-  padding-top: 70px;
+  /* Remove top padding to fix black line issue */
+  padding-top: 0;
 }
 
 /* Global Theme Classes */
@@ -144,7 +144,7 @@ html {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   body {
-    padding-top: 60px;
+    padding-top: 0;
   }
 }
 
@@ -192,6 +192,60 @@ html {
 .dark-theme .mat-calendar-body-selected {
   background-color: #BB86FC !important;
   color: #000000 !important;
+}
+
+/* Dark theme form inputs - Simple and Working */
+.dark-theme .mat-mdc-form-field {
+  --mdc-outlined-text-field-label-text-color: #ffffff !important;
+  --mdc-outlined-text-field-input-text-color: #ffffff !important;
+  --mdc-outlined-text-field-outline-color: #ffffff !important;
+  --mdc-outlined-text-field-focus-outline-color: #BB86FC !important;
+  --mdc-outlined-text-field-focus-label-text-color: #BB86FC !important;
+}
+
+.dark-theme .mat-mdc-input-element {
+  color: #ffffff !important;
+  caret-color: #BB86FC !important;
+}
+
+.dark-theme .mat-mdc-input-element::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dark-theme .mdc-text-field--outlined .mdc-notched-outline__leading,
+.dark-theme .mdc-text-field--outlined .mdc-notched-outline__notch,
+.dark-theme .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: #ffffff !important;
+}
+
+.dark-theme .mdc-text-field--focused .mdc-notched-outline__leading,
+.dark-theme .mdc-text-field--focused .mdc-notched-outline__notch,
+.dark-theme .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #BB86FC !important;
+}
+
+.dark-theme .mat-mdc-floating-label {
+  color: #ffffff !important;
+}
+
+.dark-theme .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: #BB86FC !important;
+}
+
+.dark-theme .mat-mdc-select {
+  color: #ffffff !important;
+}
+
+.dark-theme .mat-mdc-select-value {
+  color: #ffffff !important;
+}
+
+.dark-theme .mat-mdc-select-arrow {
+  color: #ffffff !important;
+}
+
+.dark-theme .mat-mdc-form-field textarea.mat-mdc-input-element {
+  color: #ffffff !important;
 }
 
 /* Ensure datepicker appears above dialogs and modals */

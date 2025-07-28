@@ -226,6 +226,30 @@
   color: #E91E63;
 }
 
+/* Admin Actions */
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0.5rem;
+}
+
+.admin-btn {
+  border: 2px solid var(--primary-color) !important;
+  background-color: rgba(156, 39, 176, 0.1) !important;
+}
+
+.admin-btn:hover {
+  color: var(--primary-color) !important;
+  background-color: rgba(156, 39, 176, 0.2) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 4px 16px rgba(156, 39, 176, 0.3) !important;
+}
+
+.admin-btn mat-icon {
+  color: var(--primary-color) !important;
+}
+
 .theme-toggle {
   margin: 0 0.25rem;
 }

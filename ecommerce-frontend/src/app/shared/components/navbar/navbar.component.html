@@ -46,6 +46,16 @@
       <!-- Theme Toggle -->
       <app-theme-toggle class="theme-toggle"></app-theme-toggle>
 
+      <!-- Admin Actions - Only for ADMIN users -->
+      <div class="admin-actions" *ngIf="isAdmin()">
+        <button mat-icon-button 
+                class="action-btn admin-btn" 
+                (click)="openCreateProduct()"
+                matTooltip="Crear Producto">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+
       <!-- User Actions - when logged in -->
       <div class="user-actions" *ngIf="authService.isAuthenticated()">
         <!-- User Avatar/Profile Button -->

@@ -6,6 +6,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { CartComponent } from '../cart/cart.component';
 import { FavoritesComponent } from '../favorites/favorites.component';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
+import { CreateProductComponent } from '../../../features/products/components/create-product.component';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ThemeToggleComponent } from "../theme-toggle/theme-toggle.component";
 import { SearchModalComponent } from '../search-modal/search-modal.component';
 import { NavbarModalService } from '../../services/navbar-modal.service';
@@ -58,7 +59,8 @@ export class NavbarComponent {
   constructor(
     private dialog: MatDialog,
     private modalService: NavbarModalService,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) {}
 
   get currentUser(): User | null {
@@ -194,5 +196,15 @@ export class NavbarComponent {
 
   onImageError(): void {
     this.imageError = true;
+  }
+
+  // Check if current user is admin
+  isAdmin(): boolean {
+    return this.authService.hasRole(['ADMIN']);
+  }
+
+  // Navigate to create product page
+  openCreateProduct(): void {
+    this.router.navigate(['/admin/create-product']);
   }
 }
