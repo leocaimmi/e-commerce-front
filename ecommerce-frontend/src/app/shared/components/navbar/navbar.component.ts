@@ -16,8 +16,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule, Router } from '@angular/router';
 import { ThemeToggleComponent } from "../theme-toggle/theme-toggle.component";
-import { SearchModalComponent } from '../search-modal/search-modal.component';
-import { NavbarModalService } from '../../services/navbar-modal.service';
 import { AuthService} from '../../../core/services/auth.service';
 import { User } from '../../../core/interfaces/Auth-request';
 
@@ -35,7 +33,6 @@ import { User } from '../../../core/interfaces/Auth-request';
     MatMenuModule,
     RouterModule,
     ThemeToggleComponent,
-    SearchModalComponent,
     LoginComponent,
     RegisterComponent,
     UserProfileComponent,
@@ -58,17 +55,12 @@ export class NavbarComponent {
 
   constructor(
     private dialog: MatDialog,
-    private modalService: NavbarModalService,
     public authService: AuthService,
     private router: Router
   ) {}
 
   get currentUser(): User | null {
     return this.authService.getCurrentUser();
-  }
-
-  openSearch(): void {
-    this.modalService.openModal('search');
   }
 
   openCart(): void {

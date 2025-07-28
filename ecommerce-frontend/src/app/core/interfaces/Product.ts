@@ -1,7 +1,6 @@
 export interface Category {
   id: string;
   name?: string;
-  description?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -33,7 +32,6 @@ export interface CreateProductRequest {
 
 export interface CreateCategoryRequest {
   name: string;
-  description?: string;
 }
 
 export interface ProductsResponse {
@@ -50,4 +48,15 @@ export interface CategoriesResponse {
   totalPages: number;
   size: number;
   number: number;
+}
+
+export interface ProductFilter {
+  search?: string;
+  categoryId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  size?: number;
+  sortBy?: string;
+  sortDir?: string;
 }

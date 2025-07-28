@@ -183,7 +183,6 @@
                       </div>
                       <div class="category-info">
                         <h5>{{ category.name }}</h5>
-                        <p *ngIf="category.description">{{ category.description }}</p>
                       </div>
                       <div class="category-check" *ngIf="productForm.get('categoryId')?.value === category.id">
                         <mat-icon>check_circle</mat-icon>

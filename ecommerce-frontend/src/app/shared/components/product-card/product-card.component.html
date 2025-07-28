@@ -1,0 +1,89 @@
+<mat-card class="product-card" [class.loading]="isLoading">
+  <div class="card-header">
+    <mat-chip-set class="category-chip">
+      <mat-chip>
+        <mat-icon>{{ getCategoryIcon(product.category.name || 'General') }}</mat-icon>
+        {{ product.category.name || 'Sin categoría' }}
+      </mat-chip>
+    </mat-chip-set>
+    
+    <div class="stock-indicator" [ngClass]="getStockStatus().class">
+      {{ getStockStatus().text }}
+    </div>
+  </div>
+
+  <mat-card-header>
+    <div class="product-title-container">
+      <div class="product-info">
+        <mat-card-title class="product-name">{{ product.name }}</mat-card-title>
+        <mat-card-subtitle class="product-sku">SKU: {{ product.sku }}</mat-card-subtitle>
+      </div>
+      <button 
+        class="favorite-btn"
+        [class.favorite-active]="isFavorite"
+        (click)="onToggleFavorite($event)"
+        [disabled]="isLoading"
+        type="button"
+        aria-label="Agregar a favoritos">
+        <mat-icon>{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="product-image-container">
+      <!-- Loading placeholder -->
+      <div *ngIf="imageLoading" class="image-loading">
+        <mat-icon>image</mat-icon>
+      </div>
+      
+      <img 
+        [src]="getImageUrl()" 
+        [alt]="product.name"
+        class="product-image"
+        [class.hidden]="imageLoading"
+        (error)="onImageError($event)"
+        (load)="onImageLoad()"
+      >
+    </div>
+
+    <p class="product-description">{{ product.shortDescription }}</p>
+
+    <div class="product-details">
+      <div class="price-container">
+        <span class="price">{{ formatPrice(product.price) }}</span>
+        <span class="stock-count">Stock: {{ product.stock }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions class="card-actions">
+    <button 
+      mat-raised-button 
+      color="primary" 
+      class="view-details-btn"
+      (click)="onViewDetails()"
+      [disabled]="isLoading"
+    >
+      <mat-icon>visibility</mat-icon>
+      Ver detalles
+    </button>
+
+    <button 
+      mat-raised-button 
+      color="accent" 
+      class="add-to-cart-btn"
+      (click)="onAddToCart()"
+      [disabled]="isLoading || product.stock === 0"
+      *ngIf="showAddToCart"
+    >
+      <mat-icon>shopping_cart</mat-icon>
+      Agregar
+    </button>
+  </mat-card-actions>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <mat-icon class="loading-spinner">hourglass_empty</mat-icon>
+  </div>
+</mat-card>

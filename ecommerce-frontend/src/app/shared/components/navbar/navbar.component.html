@@ -15,24 +15,12 @@
           <mat-icon>home</mat-icon>
           <span>Home</span>
         </a>
-        <a class="nav-link" routerLink="/shop" routerLinkActive="active" (click)="onNavLinkClick()">
-          <mat-icon>shopping_bag</mat-icon>
-          <span>Shop</span>
-        </a>
-        <a class="nav-link" routerLink="/categories" routerLinkActive="active" (click)="onNavLinkClick()">
-          <mat-icon>category</mat-icon>
-          <span>Categories</span>
-        </a>
+        <!-- Remove the products link since search is now integrated in home -->
       </div>
     </div>
 
     <!-- Right Actions -->
     <div class="actions-section">
-      <!-- Search Button -->
-      <button mat-icon-button class="action-btn search-btn" (click)="openSearch()">
-        <mat-icon>search</mat-icon>
-      </button>
-
       <!-- Cart Button -->
       <button mat-icon-button class="action-btn cart-btn" (click)="openCart()">
         <mat-icon matBadge="3" matBadgeColor="accent" matBadgeSize="small">shopping_cart</mat-icon>
@@ -97,9 +85,6 @@
   <!-- Mobile Navigation Overlay -->
   <div class="mobile-overlay" [class.active]="isMenuOpen" (click)="closeMobileMenu()"></div>
 </nav>
-
-<!-- Search Modal -->
-<app-search-modal></app-search-modal>
 
 <!-- Login Component Overlay -->
 <div class="login-overlay" [class.active]="showLogin" (click)="closeLogin()">

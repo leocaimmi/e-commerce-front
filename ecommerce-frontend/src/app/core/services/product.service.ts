@@ -15,18 +15,50 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Obtiene todos los productos con paginación
-   * @param page Número de página (0-based)
-   * @param size Tamaño de página
-   * @param sortBy Campo por el cual ordenar
-   * @param sortDir Dirección del ordenamiento (asc, desc)
+   * Obtiene todos los productos con paginación y filtros
+   * @param options Opciones de consulta
    * @returns Observable con la respuesta paginada de productos
    */
-  getProducts(page: number = 0, size: number = 20, sortBy: string = 'name'): Observable<ProductsResponse> {
-    const params = new HttpParams()
+  getProducts(options: {
+    page?: number;
+    size?: number;
+    sortBy?: string;
+    sortDir?: 'asc' | 'desc';
+    // Filtros preparados para futuro uso
+    minPrice?: number;
+    maxPrice?: number;
+    categoryId?: string;
+    search?: string;
+  } = {}): Observable<ProductsResponse> {
+    const {
+      page = 0,
+      size = 20,
+      sortBy = 'name',
+      sortDir = 'asc',
+      minPrice,
+      maxPrice,
+      categoryId,
+      search
+    } = options;
+
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
       .set('sort', `${sortBy}`);
+
+    // Filtros preparados (comentados hasta que estén disponibles en el backend)
+    // if (minPrice !== undefined) {
+    //   params = params.set('minPrice', minPrice.toString());
+    // }
+    // if (maxPrice !== undefined) {
+    //   params = params.set('maxPrice', maxPrice.toString());
+    // }
+    // if (categoryId) {
+    //   params = params.set('categoryId', categoryId);
+    // }
+    // if (search) {
+    //   params = params.set('search', search);
+    // }
 
     return this.http.get<ProductsResponse>(this.BASE_URL, { params })
       .pipe(
@@ -37,20 +69,6 @@ export class ProductService {
       );
   }
 
-  /**
-   * Obtiene un producto por su ID
-   * @param id ID del producto
-   * @returns Observable con el producto
-   */
-  getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.BASE_URL}/${id}`)
-      .pipe(
-        tap(product => {
-          console.log('Product retrieved:', product);
-        }),
-        catchError(this.handleError)
-      );
-  }
 
   /**
    * Crea un nuevo producto (solo ADMIN)
@@ -83,20 +101,7 @@ export class ProductService {
       );
   }
 
-  /**
-   * Elimina un producto (solo ADMIN)
-   * @param id ID del producto
-   * @returns Observable vacío
-   */
-  deleteProduct(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.BASE_URL}/${id}`)
-      .pipe(
-        tap(() => {
-          console.log('Product deleted successfully:', id);
-        }),
-        catchError(this.handleError)
-      );
-  }
+
 
   /**
    * Busca productos por nombre
@@ -120,26 +125,7 @@ export class ProductService {
       );
   }
 
-  /**
-   * Obtiene productos por categoría
-   * @param categoryId ID de la categoría
-   * @param page Número de página
-   * @param size Tamaño de página
-   * @returns Observable con la respuesta paginada de productos
-   */
-  getProductsByCategory(categoryId: string, page: number = 0, size: number = 20): Observable<ProductsResponse> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
 
-    return this.http.get<ProductsResponse>(`${this.BASE_URL}/category/${categoryId}`, { params })
-      .pipe(
-        tap(response => {
-          console.log('Products by category:', response);
-        }),
-        catchError(this.handleError)
-      );
-  }
 
   /**
    * Maneja errores HTTP
