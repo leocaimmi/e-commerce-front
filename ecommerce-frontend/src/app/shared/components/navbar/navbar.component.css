@@ -214,8 +214,24 @@
   box-shadow: 0 4px 12px var(--shadow-color);
 }
 
+.search-btn {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .search-btn:hover {
-  color: #4CAF50;
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.search-btn mat-icon {
+  font-size: 1.3rem;
 }
 
 .cart-btn:hover {
@@ -224,6 +240,30 @@
 
 .favorites-btn:hover {
   color: #E91E63;
+}
+
+/* Admin Actions */
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0.5rem;
+}
+
+.admin-btn {
+  border: 2px solid var(--primary-color) !important;
+  background-color: rgba(156, 39, 176, 0.1) !important;
+}
+
+.admin-btn:hover {
+  color: var(--primary-color) !important;
+  background-color: rgba(156, 39, 176, 0.2) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 4px 16px rgba(156, 39, 176, 0.3) !important;
+}
+
+.admin-btn mat-icon {
+  color: var(--primary-color) !important;
 }
 
 .theme-toggle {

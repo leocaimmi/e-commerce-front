@@ -2,41 +2,174 @@
   <!-- Navigation -->
   <app-navbar></app-navbar>
   
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="hero-section">
-      <div class="hero-container">
-        <h1 class="hero-title">Welcome to Da Vinci Commerce</h1>
+  <!-- Hero Section (Welcome Message - Shows only once per session) -->
+  <div class="hero-section" *ngIf="showHeroSection()" [@fadeOut]>
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title">¡Welcome to Da Vinci Commerce!</h1>
         <p class="hero-subtitle">Discover amazing products with the best shopping experience</p>
-        <div class="hero-actions">
-          <button class="cta-button primary">Shop Now</button>
-          <button class="cta-button secondary">Explore Categories</button>
+        <p class="hero-note">This welcome message will only appear once per session</p>
+        <div class="hero-icon">
+          <mat-icon>storefront</mat-icon>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
     
-    <!-- Placeholder for future content -->
-    <div class="content-sections">
-      <section class="featured-section">
-        <div class="section-container">
-          <h2 class="section-title">Featured Products</h2>
-          <p class="section-description">Coming soon...</p>
+    <!-- Search and Filters Section -->
+    <section class="search-section">
+      <div class="container">
+        <div class="search-header">
+          <h2 class="search-title">Explorar Productos</h2>
+          <p class="search-description">Encuentra exactamente lo que buscas</p>
         </div>
-      </section>
-      
-      <section class="categories-section">
-        <div class="section-container">
-          <h2 class="section-title">Popular Categories</h2>
-          <p class="section-description">Coming soon...</p>
+        
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <mat-form-field class="search-input" appearance="outline">
+            <mat-label>Buscar productos</mat-label>
+            <input 
+              matInput 
+              [(ngModel)]="searchQuery" 
+              (ngModelChange)="onSearchQueryChange()"
+              placeholder="Escribe el nombre del producto..."
+              autocomplete="off">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
         </div>
-      </section>
-    </div>
+
+        <!-- Categories Filter -->
+        <div class="categories-filter">
+          <h3 class="filter-title">Categorías</h3>
+          <div class="categories-grid">
+            <button 
+              class="category-chip" 
+              [class.selected]="selectedCategoryId() === '' && selectedCategories().length === 0"
+              (click)="selectAllCategories()">
+              <mat-icon class="category-icon">apps</mat-icon>
+              <span class="category-name">Todas</span>
+            </button>
+            <button 
+              *ngFor="let category of categories()" 
+              class="category-chip category-tag"
+              [class.selected]="isCategoryTagSelected(category)"
+              (click)="toggleCategoryTag(category)"
+              [attr.aria-pressed]="isCategoryTagSelected(category)"
+              type="button">
+              <mat-icon class="category-icon">{{ getCategoryIcon(category.name!) }}</mat-icon>
+              <span class="category-name">{{ category.name }}</span>
+              <mat-icon *ngIf="isCategoryTagSelected(category)" class="check-icon">check</mat-icon>
+            </button>
+            
+            <!-- Clear categories button -->
+            <button 
+              *ngIf="selectedCategories().length > 0"
+              class="category-chip clear-categories-btn"
+              (click)="clearCategoryTags()"
+              type="button"
+              aria-label="Limpiar categorías">
+              <mat-icon class="category-icon">clear_all</mat-icon>
+              <span class="category-name">Limpiar</span>
+            </button>
+          </div>
+          
+          <!-- Selected categories summary -->
+          <div class="selected-categories-summary" *ngIf="selectedCategories().length > 0">
+            <span class="summary-text">
+              {{ selectedCategories().length }} categoría(s) seleccionada(s):
+            </span>
+            <mat-chip-set class="selected-chips">
+              <mat-chip 
+                *ngFor="let category of selectedCategories()"
+                (removed)="toggleCategoryTag(category)"
+                removable="true">
+                {{ category.name }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+
+        <!-- Active Filters -->
+        <div class="active-filters" *ngIf="hasActiveFilters() || selectedCategories().length > 0">
+          <div class="filter-summary">
+            <span class="results-count">
+              {{ totalElements() }} productos encontrados
+              <span *ngIf="selectedCategories().length > 0">
+                ({{ selectedCategories().length }} categoría(s) seleccionada(s))
+              </span>
+            </span>
+            <button mat-button class="clear-all" (click)="clearAllFilters()">
+              <mat-icon>clear</mat-icon>
+              Limpiar todo
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+      <div class="container">
+        
+        <!-- Loading -->
+        <div *ngIf="isLoadingProducts()" class="loading-state">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Cargando productos...</p>
+        </div>
+
+        <!-- Products Grid -->
+        <div *ngIf="!isLoadingProducts() && products().length > 0" class="products-grid">
+          <app-product-card
+            *ngFor="let product of products(); trackBy: trackByProductId"
+            [product]="product"
+            [isLoading]="false"
+            (addToCart)="onAddToCart($event)"
+            (viewDetails)="onViewProductDetails($event)"
+            (toggleFavorite)="onToggleFavorite($event)">
+          </app-product-card>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoadingProducts() && products().length === 0" class="empty-state">
+          <div class="empty-content">
+            <mat-icon class="empty-icon">search_off</mat-icon>
+            <h3>No se encontraron productos</h3>
+            <p *ngIf="hasActiveFilters()">Intenta ajustar tus filtros de búsqueda</p>
+            <p *ngIf="!hasActiveFilters()">Aún no hay productos disponibles</p>
+            <button mat-raised-button color="primary" (click)="clearFilters()" *ngIf="hasActiveFilters()">
+              Ver todos los productos
+            </button>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper" *ngIf="!isLoadingProducts() && products().length > 0">
+          <mat-paginator
+            [length]="totalElements()"
+            [pageSize]="pageSize()"
+            [pageIndex]="currentPage()"
+            [pageSizeOptions]="[12, 24, 48]"
+            [showFirstLastButtons]="true"
+            (page)="onPageChange($event)"
+            aria-label="Navegación de productos">
+          </mat-paginator>
+        </div>
+      </div>
+    </section>
   </main>
-  
-  <!-- Footer placeholder -->
-  <footer class="footer-placeholder">
-    <div class="footer-container">
-      <p>&copy; 2025 Da Vinci Commerce. All rights reserved.</p>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Da Vinci Commerce. Todos los derechos reservados.</p>
+      <!-- Testing Button - Remove in production -->
+      <button mat-raised-button color="warn" (click)="clearWelcomeStorage()" class="reset-welcome-btn">
+        Reset Welcome Screen (Testing)
+      </button>
     </div>
   </footer>
 </div>

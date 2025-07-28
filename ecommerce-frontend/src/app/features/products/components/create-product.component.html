@@ -1,0 +1,294 @@
+<div class="create-product-page">
+  <div class="page-header">
+    <div class="header-content">
+      <button mat-icon-button (click)="onCancel()" class="back-btn">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>
+        <mat-icon>add_shopping_cart</mat-icon>
+        Crear Nuevo Producto
+      </h1>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <mat-card class="product-form-card">
+      <mat-card-content>
+        
+        <!-- Formulario de Producto -->
+        <form [formGroup]="productForm" class="product-form">
+          
+          <!-- Sección: Información Básica -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon>inventory_2</mat-icon>
+              <h3>Información Básica</h3>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>SKU del Producto</mat-label>
+                <input matInput 
+                       formControlName="sku"
+                       placeholder="Ej: PROD-001"
+                       maxlength="20">
+                <mat-icon matPrefix>qr_code</mat-icon>
+                <mat-hint>Código único del producto</mat-hint>
+                <mat-error *ngIf="productForm.get('sku')?.hasError('required')">
+                  El SKU es requerido
+                </mat-error>
+                <mat-error *ngIf="productForm.get('sku')?.hasError('minlength')">
+                  El SKU debe tener al menos 3 caracteres
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Nombre del Producto</mat-label>
+                <input matInput 
+                       formControlName="name"
+                       placeholder="Ej: Smartphone Samsung Galaxy"
+                       maxlength="100">
+                <mat-icon matPrefix>label</mat-icon>
+                <mat-hint>Nombre comercial del producto</mat-hint>
+                <mat-error *ngIf="productForm.get('name')?.hasError('required')">
+                  El nombre es requerido
+                </mat-error>
+                <mat-error *ngIf="productForm.get('name')?.hasError('minlength')">
+                  El nombre debe tener al menos 2 caracteres
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Descripción Corta</mat-label>
+              <textarea matInput 
+                        formControlName="shortDescription"
+                        placeholder="Describe brevemente las características principales del producto..."
+                        rows="3"
+                        maxlength="500"></textarea>
+              <mat-icon matPrefix>description</mat-icon>
+              <mat-hint>Máximo 500 caracteres</mat-hint>
+              <mat-error *ngIf="productForm.get('shortDescription')?.hasError('required')">
+                La descripción es requerida
+              </mat-error>
+              <mat-error *ngIf="productForm.get('shortDescription')?.hasError('minlength')">
+                La descripción debe tener al menos 10 caracteres
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Sección: Precio e Inventario -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon>attach_money</mat-icon>
+              <h3>Precio e Inventario</h3>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Precio (USD)</mat-label>
+                <input matInput 
+                       type="number"
+                       formControlName="price"
+                       placeholder="0.00"
+                       min="0"
+                       step="0.01">
+                <mat-icon matPrefix>monetization_on</mat-icon>
+                <span matTextPrefix>$ </span>
+                <mat-hint>Precio en dólares estadounidenses</mat-hint>
+                <mat-error *ngIf="productForm.get('price')?.hasError('required')">
+                  El precio es requerido
+                </mat-error>
+                <mat-error *ngIf="productForm.get('price')?.hasError('min')">
+                  El precio debe ser mayor a 0
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Stock Disponible</mat-label>
+                <input matInput 
+                       type="number"
+                       formControlName="stock"
+                       placeholder="0"
+                       min="0"
+                       step="1">
+                <mat-icon matPrefix>inventory</mat-icon>
+                <span matTextSuffix> unidades</span>
+                <mat-hint>Cantidad disponible en inventario</mat-hint>
+                <mat-error *ngIf="productForm.get('stock')?.hasError('required')">
+                  El stock es requerido
+                </mat-error>
+                <mat-error *ngIf="productForm.get('stock')?.hasError('min')">
+                  El stock no puede ser negativo
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Sección: Imagen del Producto -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon>image</mat-icon>
+              <h3>Imagen del Producto</h3>
+            </div>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>URL de Imagen (Opcional)</mat-label>
+              <input matInput 
+                     formControlName="imageUrl"
+                     placeholder="https://ejemplo.com/imagen.jpg"
+                     type="url">
+              <mat-icon matPrefix>link</mat-icon>
+              <mat-hint>Deja en blanco si no tienes una imagen disponible</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <!-- Sección: Categoría -->
+          <div class="form-section">
+            <div class="section-header">
+              <mat-icon>category</mat-icon>
+              <h3>Categoría</h3>
+            </div>
+            
+            <div class="category-selection-new">
+              <!-- Loading state -->
+              <div *ngIf="isLoadingCategories" class="loading-categories">
+                <mat-spinner diameter="24"></mat-spinner>
+                <span>Cargando categorías...</span>
+              </div>
+
+              <!-- Category grid when loaded -->
+              <div *ngIf="!isLoadingCategories" class="category-grid">
+                <div class="category-grid-header">
+                  <h4>Selecciona una categoría</h4>
+                  <span class="category-count">{{ categories.length }} disponibles</span>
+                </div>
+
+                <!-- Empty state -->
+                <div *ngIf="categories.length === 0" class="empty-categories">
+                  <mat-icon>category</mat-icon>
+                  <span>No hay categorías disponibles</span>
+                  <small>Crea una nueva categoría para comenzar</small>
+                </div>
+
+                <!-- Category cards -->
+                <div *ngIf="categories.length > 0" class="category-cards">
+                  <div *ngFor="let category of categories; trackBy: trackByCategory"
+                       class="category-card"
+                       [class.selected]="productForm.get('categoryId')?.value === category.id"
+                       (click)="selectCategory(category.id)">
+                    <div class="category-card-content">
+                      <div class="category-icon">
+                        <mat-icon>{{ getCategoryIcon(category.name) }}</mat-icon>
+                      </div>
+                      <div class="category-info">
+                        <h5>{{ category.name }}</h5>
+                      </div>
+                      <div class="category-check" *ngIf="productForm.get('categoryId')?.value === category.id">
+                        <mat-icon>check_circle</mat-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Error message -->
+                <div *ngIf="productForm.get('categoryId')?.hasError('required') && productForm.get('categoryId')?.touched" 
+                     class="category-error">
+                  <mat-icon>error</mat-icon>
+                  <span>Debes seleccionar una categoría</span>
+                </div>
+              </div>
+
+              <!-- New category button -->
+              <button type="button"
+                      mat-raised-button
+                      color="accent"
+                      class="new-category-btn"
+                      (click)="toggleCategoryForm()">
+                <mat-icon>{{ showCategoryForm ? 'expand_less' : 'add' }}</mat-icon>
+                {{ showCategoryForm ? 'Cancelar' : 'Nueva Categoría' }}
+              </button>
+            </div>
+
+            <!-- Formulario de Nueva Categoría -->
+            <div class="category-form-container" *ngIf="showCategoryForm">
+              <div class="category-form">
+                <div class="category-form-header">
+                  <mat-icon>add_circle</mat-icon>
+                  <h4>Crear Nueva Categoría</h4>
+                </div>
+                
+                <form [formGroup]="categoryForm" class="new-category-form">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nombre de la Categoría</mat-label>
+                    <input matInput 
+                           formControlName="name"
+                           placeholder="Ej: Electrónicos"
+                           maxlength="50">
+                    <mat-icon matPrefix>category</mat-icon>
+                    <mat-hint>Nombre descriptivo de la categoría</mat-hint>
+                    <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
+                      El nombre es requerido
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Descripción</mat-label>
+                    <textarea matInput 
+                              formControlName="description"
+                              placeholder="Describe qué productos incluye esta categoría..."
+                              rows="2"
+                              maxlength="200"></textarea>
+                    <mat-icon matPrefix>description</mat-icon>
+                    <mat-hint>Descripción breve de la categoría</mat-hint>
+                    <mat-error *ngIf="categoryForm.get('description')?.hasError('required')">
+                      La descripción es requerida
+                    </mat-error>
+                  </mat-form-field>
+
+                  <div class="category-form-actions">
+                    <button type="button"
+                            mat-button
+                            (click)="toggleCategoryForm()">
+                      <mat-icon>cancel</mat-icon>
+                      Cancelar
+                    </button>
+                    <button type="button"
+                            mat-raised-button
+                            color="primary"
+                            (click)="onCreateCategory()"
+                            [disabled]="categoryForm.invalid || isCreatingCategory">
+                      <mat-icon *ngIf="isCreatingCategory" class="spinning">sync</mat-icon>
+                      <mat-icon *ngIf="!isCreatingCategory">add</mat-icon>
+                      {{ isCreatingCategory ? 'Creando...' : 'Crear Categoría' }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions class="form-actions">
+        <button type="button"
+                mat-button
+                (click)="onCancel()"
+                class="cancel-btn">
+          <mat-icon>cancel</mat-icon>
+          Cancelar
+        </button>
+        <button type="button"
+                mat-raised-button
+                color="primary"
+                (click)="onCreateProduct()"
+                [disabled]="productForm.invalid || isLoading"
+                class="create-btn">
+          <mat-icon *ngIf="isLoading" class="spinning">sync</mat-icon>
+          <mat-icon *ngIf="!isLoading">save</mat-icon>
+          {{ isLoading ? 'Creando...' : 'Crear Producto' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

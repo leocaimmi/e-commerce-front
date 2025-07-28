@@ -49,7 +49,6 @@
         </div>
 
         <form [formGroup]="profileForm" 
-              (ngSubmit)="onSaveProfile()" 
               *ngIf="isEditing"
               class="profile-form">
           
@@ -70,15 +69,37 @@
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Fecha de Nacimiento</mat-label>
             <input matInput 
-                   [matDatepicker]="picker" 
-                   formControlName="birthday"
-                   placeholder="Selecciona tu fecha de nacimiento">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+                   placeholder="Selecciona tu fecha de nacimiento"
+                   readonly
+                   (click)="toggleCalendar()"
+                   [value]="getFormattedBirthday()">
+            <mat-icon matSuffix (click)="toggleCalendar()" style="cursor: pointer;">calendar_today</mat-icon>
             <mat-error *ngIf="profileForm.get('birthday')?.hasError('required')">
               La fecha de nacimiento es requerida
             </mat-error>
           </mat-form-field>
+
+          <!-- Calendario inline integrado -->
+          <div class="inline-calendar-container" *ngIf="showCalendar">
+            <div class="calendar-header">
+              <small class="calendar-instruction">Selecciona tu fecha de nacimiento</small>
+            </div>
+            <mat-calendar 
+              [selected]="selectedDateTemp || profileForm.get('birthday')?.value"
+              (selectedChange)="onDateSelected($event)"
+              [maxDate]="maxDate"
+              [minDate]="minDate">
+            </mat-calendar>
+            <div class="calendar-actions">
+              <button mat-button (click)="closeCalendar()">Cancelar</button>
+              <button mat-raised-button 
+                      color="primary" 
+                      (click)="acceptDate()"
+                      [disabled]="!selectedDateTemp">
+                Aceptar
+              </button>
+            </div>
+          </div>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>URL de Foto de Perfil</mat-label>
@@ -105,9 +126,10 @@
                     (click)="cancelEditing()">
               Cancelar
             </button>
-            <button type="submit" 
+            <button type="button" 
                     mat-raised-button 
                     color="primary"
+                    (click)="onSaveProfile()"
                     [disabled]="profileForm.invalid || isSaving">
               <mat-icon *ngIf="isSaving">sync</mat-icon>
               <mat-icon *ngIf="!isSaving">save</mat-icon>

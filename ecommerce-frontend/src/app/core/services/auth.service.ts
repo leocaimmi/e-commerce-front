@@ -185,28 +185,7 @@ export class AuthService {
     return null;
   }
 
-  /**
-   * Retrieves the username from the stored JWT token.
-   *
-   * Decodes the JWT token and extracts the `username` property if available.
-   * Returns `null` if the token is missing, invalid, or does not contain a username.
-   *
-   * @returns The username as a string, or `null` if not available.
-   */
-  getName(): string | null {
-    const token = this.getToken();
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        return decodedToken.name || null;
-      } catch (error) {
-        console.error('Error al decodificar el token:', error);
-        return null;
-      }
-    }
-    return null;
-  }
-
+ 
   /**
    * Obtiene todos los datos del usuario desde el token
    * @returns Datos del usuario o null si no existe el token
@@ -230,24 +209,7 @@ export class AuthService {
     return null;
   }
 
-  /**
-   * Obtiene la fecha de cumpleaños del usuario desde el token
-   * @returns Fecha de cumpleaños o null si no existe
-   */
-  getUserBirthday(): string | null {
-    const token = this.getToken();
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        return decodedToken.birthday || null;
-      } catch (error) {
-        console.error('Error al decodificar el token:', error);
-        return null;
-      }
-    }
-    return null;
-  }
-
+ 
   /**
    * Obtiene datos del usuario desde la API usando el email del token
    * @returns Observable con los datos del usuario
@@ -258,8 +220,7 @@ export class AuthService {
       return of(null);
     }
 
-    const encodedEmail = encodeURIComponent(currentUser.email);
-    return this.http.get<User>(`${environment.apiUrl}api/v1/users?email=${encodedEmail}`)
+    return this.http.get<User>(`${environment.apiUrl}api/v1/users/me`)
       .pipe(
         tap(user => {
           console.log('User data from API:', user);
